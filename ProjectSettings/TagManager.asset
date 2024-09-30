@@ -8,6 +8,9 @@ TagManager:
   - Enemy
   - BallTarget
   - GoalTrigger
+  - Ball
+  - GoalTrigger1
+  - GoalTrigger2
   layers:
   - Default
   - TransparentFX

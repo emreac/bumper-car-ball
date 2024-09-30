@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class BallEnemy : MonoBehaviour
 {
-    GameObject goalText;
+    public ScoreManager scoreManager;
+
+    //GameObject goalText;
     [SerializeField] float speed;
     Rigidbody enemyBallRb;
     GameObject ball;
@@ -13,10 +16,10 @@ public class BallEnemy : MonoBehaviour
     void Start()
     {
         enemyBallRb = GetComponent<Rigidbody>();
-        ball = GameObject.Find("BallTarget");
-        goalText = GameObject.Find("GoalText");
+        ball = GameObject.Find("GoalTrigger1");
+        //goalText = GameObject.Find("GoalText");
 
-
+        /*
         if (goalText != null)
         {
             goalText.SetActive(false); // Ensure it starts hidden
@@ -25,21 +28,32 @@ public class BallEnemy : MonoBehaviour
         {
             Debug.LogError("GoalText object not found!");
         }
+        */
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector3 lookDirection = (ball.transform.position - transform.position).normalized;
-        enemyBallRb.AddForce(lookDirection * speed);
+        enemyBallRb.AddForce(lookDirection * speed*Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("GoalTrigger"))
+        if (other.gameObject.CompareTag("GoalTrigger2"))
         {
-            goalText.SetActive(true);
-            StartCoroutine(WaitAfterGoal());
+            DOTween.Restart("GoalText");
+           // goalText.SetActive(true);
+            scoreManager.Player1Scored();
+            
+        }
+
+        if (other.gameObject.CompareTag("GoalTrigger1"))
+        {
+            DOTween.Restart("GoalText");
+            //goalText.SetActive(true);
+            scoreManager.Player2Scored();
+           
         }
     }
 
